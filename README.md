@@ -15,6 +15,12 @@ Then, you can score entries in a GFF file with a command like this (using the ex
 
 The script will take a while to run, but it prints output that hopefully gives an idea about how long it will take.
 
+## Post-processing
+
+If you want to, you can post-process the resulting file into a single prediction per peptide. In case there are multiple peptides where the predictions disagree, the peptide will be counted as coding (i.e. one positive prediction is enough). There is a simple script for doing this that can be used like this:
+
+`python post_process_phylocsf.py A431_phyloCSF.txt > A431_phyloCSF_per_peptide.txt`
+
 ## Details
 
 PhyloCSF scores are provided in six reading frames (+0, +1, +2, -0, -1, -2). There is a different bigWig file for each reading frame, so the script opens one of those at a time and queries each bw file with each genomic region. The pyBigWig.stats() function will return the mean PhyloCSF score for the region. We simply take a mean value above zero to mean that there is coding potential, and a negative value means there isn't. Previously, we used a slightly (only slightly) more detailed way of looking at the scores where we compared the number of positively scored bases in an interval with the number of negatively scored ones, and called the region coding if the number of positively scored bases was larger. You might want to use a different definition. 
